@@ -201,14 +201,13 @@ export const tree = {
 
       const leafGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
       leafGroup.setAttribute("transform", `translate(${x}, ${y}) rotate(${angle})`);
-      leafGroup.setAttribute("class", "canopy-leaf");
-      
-      leafGroup.setAttribute("style", `animation-delay: ${i * 30}ms;`);
 
       const leafPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       leafPath.setAttribute("d", "M 0 0 C 4 -12, 10 -12, 12 -4 C 12 4, 4 4, 0 0");
       leafPath.setAttribute("fill", color);
       leafPath.setAttribute("opacity", previewState === "withered" ? "0.6" : "0.85");
+      leafPath.setAttribute("class", "canopy-leaf");
+      leafPath.setAttribute("style", `animation-delay: ${i * 30}ms;`);
       leafGroup.appendChild(leafPath);
 
       container.appendChild(leafGroup);
@@ -249,7 +248,6 @@ export const tree = {
 
       const blossomGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
       blossomGroup.setAttribute("transform", `translate(${x}, ${y})`);
-      blossomGroup.setAttribute("class", "weekly-blossom-dot");
 
       const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       dot.setAttribute("cx", "0");
@@ -258,12 +256,82 @@ export const tree = {
       dot.setAttribute("fill", "#EAD9A4"); // Soft gold/yellow petals
       dot.setAttribute("stroke", "#3B1E30");
       dot.setAttribute("stroke-width", "0.6");
+      dot.setAttribute("class", "weekly-blossom-dot");
       blossomGroup.appendChild(dot);
       
       container.appendChild(blossomGroup);
     }
 
-    // 3. ACTIVE WEEK ACTION BLOOMS (Exactly 3 prominent flowers representing this week's 3 nudges)
+    // 3. STREAK FRUITS (Grows sweet orange/coral berries for active weekly streaks!)
+    const streak = state.streak || 0;
+    let fruitsCount = 0;
+    if (previewState === "withered") {
+      fruitsCount = 0;
+    } else if (previewState === "flourishing") {
+      fruitsCount = 12;
+    } else {
+      fruitsCount = Math.min(12, streak * 2); // 2 fruits per streak level, max 12
+    }
+
+    const fruitPoints = [
+      { x: endX - 80, y: endY - 60 },
+      { x: endX + 85, y: endY - 50 },
+      { x: endX - 55, y: endY - 110 },
+      { x: endX + 65, y: endY - 100 },
+      { x: endX - 20, y: endY - 100 },
+      { x: endX + 25, y: endY - 110 },
+      { x: endX - 70, y: endY - 50 },
+      { x: endX + 75, y: endY - 40 },
+      { x: endX - 35, y: endY - 120 },
+      { x: endX + 35, y: endY - 125 },
+      { x: endX - 95, y: endY - 65 },
+      { x: endX + 95, y: endY - 55 }
+    ];
+
+    for (let k = 0; k < fruitsCount; k++) {
+      const pt = fruitPoints[k % fruitPoints.length];
+      const fruitGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      fruitGroup.setAttribute("transform", `translate(${pt.x}, ${pt.y})`);
+
+      const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+      title.textContent = `Streak Fruit! Active Streak: ${streak} weeks`;
+      fruitGroup.appendChild(title);
+
+      const animGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      animGroup.setAttribute("class", "streak-fruit");
+
+      // A small stem for the fruit
+      const stem = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      stem.setAttribute("d", "M 0 0 Q 2 -5, 0 -7");
+      stem.setAttribute("stroke", "#3B1E30");
+      stem.setAttribute("stroke-width", "0.8");
+      stem.setAttribute("fill", "none");
+      animGroup.appendChild(stem);
+
+      // Draw a little round fruit/berry
+      const berry = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      berry.setAttribute("cx", "0");
+      berry.setAttribute("cy", "0");
+      berry.setAttribute("r", "4.5");
+      berry.setAttribute("fill", "#FF8A65"); // Beautiful coral orange/rose fruit color
+      berry.setAttribute("stroke", "#3B1E30");
+      berry.setAttribute("stroke-width", "0.8");
+      animGroup.appendChild(berry);
+      
+      // Add a subtle reflection highlight
+      const highlight = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      highlight.setAttribute("cx", "-1.5");
+      highlight.setAttribute("cy", "-1.5");
+      highlight.setAttribute("r", "1.2");
+      highlight.setAttribute("fill", "#FFF");
+      highlight.setAttribute("opacity", "0.6");
+      animGroup.appendChild(highlight);
+
+      fruitGroup.appendChild(animGroup);
+      container.appendChild(fruitGroup);
+    }
+
+    // 4. ACTIVE WEEK ACTION BLOOMS (Exactly 3 prominent flowers representing this week's 3 nudges)
     const bloomPositions = [
       { x: endX - 90, y: endY - 80, angle: -135 },
       { x: endX - 5, y: endY - 145, angle: -90 },
@@ -288,14 +356,15 @@ export const tree = {
 
       const bloomGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
       bloomGroup.setAttribute("transform", `translate(${pos.x}, ${pos.y})`);
-      bloomGroup.setAttribute("class", `action-bloom ${completed ? "bloomed" : "withered"}`);
-      bloomGroup.setAttribute("style", `cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);`);
-      
-      bloomGroup.setAttribute("data-nudge-index", index);
+
+      const animGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      animGroup.setAttribute("class", `action-bloom ${completed ? "bloomed" : "withered"}`);
+      animGroup.setAttribute("style", `cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);`);
+      animGroup.setAttribute("data-nudge-index", index);
 
       const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
       title.textContent = nudge ? `${nudge.title} (${completed ? "Completed" : "Pending"})` : "Weekly bloom";
-      bloomGroup.appendChild(title);
+      animGroup.appendChild(title);
 
       if (completed) {
         // Outer pulsing glow
@@ -306,7 +375,7 @@ export const tree = {
         glow.setAttribute("fill", "#CBE7D3");
         glow.setAttribute("opacity", "0.4");
         glow.setAttribute("class", "bloom-glow-pulse");
-        bloomGroup.appendChild(glow);
+        animGroup.appendChild(glow);
 
         // Flower petals
         for (let p = 0; p < 5; p++) {
@@ -317,7 +386,7 @@ export const tree = {
           petal.setAttribute("fill", "#CBE7D3");
           petal.setAttribute("stroke", "#8FA89B");
           petal.setAttribute("stroke-width", "0.8");
-          bloomGroup.appendChild(petal);
+          animGroup.appendChild(petal);
         }
 
         // Center pollen core
@@ -328,7 +397,7 @@ export const tree = {
         center.setAttribute("fill", "#FDFBF7");
         center.setAttribute("stroke", "#3B1E30");
         center.setAttribute("stroke-width", "1");
-        bloomGroup.appendChild(center);
+        animGroup.appendChild(center);
 
       } else {
         const stemAngle = pos.angle + 25; // Droop
@@ -350,11 +419,10 @@ export const tree = {
         bud.setAttribute("opacity", "0.85");
         budGroup.appendChild(bud);
 
-        bloomGroup.appendChild(budGroup);
+        animGroup.appendChild(budGroup);
       }
 
-      container.appendChild(bloomGroup);
-
+      bloomGroup.appendChild(animGroup);
       container.appendChild(bloomGroup);
     });
   }

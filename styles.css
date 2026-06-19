@@ -767,6 +767,18 @@ button, input, select, textarea {
   animation: blossomGrow 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
 }
 
+.streak-fruit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: blossomGrow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+  transition: transform 0.2s ease;
+}
+
+.streak-fruit:hover {
+  transform: scale(1.25);
+  cursor: pointer;
+}
+
 /* Hover effects for SVG blooms */
 .action-bloom {
   transform-box: fill-box;
