@@ -702,6 +702,11 @@ export const simulation = {
     nudges.forEach((n, idx) => {
       n.completed = false;
       n.category = categories[idx];
+      n.foggMetrics = {
+        motivation: 60 + Math.floor(Math.random() * 25),
+        ability: n.effort === "Easy" ? 90 : n.effort === "Medium" ? 70 : 45,
+        prompt: 95
+      };
     });
 
     return nudges;
@@ -768,6 +773,89 @@ export const simulation = {
     } else {
       // Standard Editorial
       return `Progress is rarely a straight line. By completing '${completedNames}', you made real adjustments to your footprint. Even though a few things slipped, you are learning to navigate new friction. Every small action feeds the soil. Be proud of the steps you took, and let the missed tasks guide where you focus next.`;
+    }
+  },
+
+  /**
+   * Generates a 3-agent climate debate set in the user's city in 2035.
+   */
+  async generateAgentDebate(profile, customPrompts, apiKey = null) {
+    try {
+      const systemPrompt = `You are a Multi-Agent Climate Debate Simulator.
+Based on the user's Carbon Profile, simulate a collaborative, insightful, and highly realistic climate debate set in July 2035 in their city. The debate has exactly 3 turns, one from each of these distinct agents:
+1. Eco-Optimist: Enthusiastic about citizen-led changes and local green tech. Focuses on hope and micro-habits.
+2. Climate Realist: Focuses on hard geographic realities, severe weather predictions, and large-scale systemic challenges.
+3. Municipal Planner: Focuses on city budget, public utility infrastructure, ROI, and practical policy.
+
+Each agent's statement should be 70-100 words. Speak in their voice.
+Return the output as a valid JSON object in this format:
+{
+  "turns": [
+    { "agent": "Eco-Optimist", "text": "..." },
+    { "agent": "Climate Realist", "text": "..." },
+    { "agent": "Municipal Planner", "text": "..." }
+  ]
+}
+Do not use markdown code block formatting.`;
+
+      const userPrompt = `Carbon Profile:
+Persona: ${profile.personaName}
+Annual CO2 emissions: ${profile.annualCo2} tons/year
+City: ${profile.city}
+Summary: ${profile.summaryStatement}`;
+
+      return await callGroq(systemPrompt, userPrompt, apiKey);
+    } catch (err) {
+      console.warn("Groq API agent debate failed, falling back to local simulation:", err);
+    }
+
+    // Fallback simulation
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    const city = profile.city || "your city";
+    const persona = profile.personaName || "The Conscious Citizen";
+    const co2 = profile.annualCo2 || 12.0;
+
+    return {
+      turns: [
+        {
+          agent: "Eco-Optimist",
+          text: `Looking at ${city} in 2035, the progress is inspiring! Residents like our ${persona} have adopted micro-habits—cycling more, choosing plant-based meals, and turning off vampire appliances. This collective shift has reduced municipal carbon loads by 25%. Small, local actions are forming the foundation of a highly resilient, clean-energy community. The future is active and decentralized!`
+        },
+        {
+          agent: "Climate Realist",
+          text: `While the active transit shift is commendable, we must face the hard geography of ${city}. Even in 2035, average temperatures have risen by 1.8°C, and storm surges are testing our sea walls. With ${persona}'s carbon footprint at ${co2} tons, we are still pushing the limits of the electrical grid. Micro-habits are a start, but without deep geothermal heating upgrades and structural seawall reinforcement, individual efforts will be overwhelmed.`
+        },
+        {
+          agent: "Municipal Planner",
+          text: `From the city's perspective, both views are valid. Allocating $2B for transit lanes and matching grid subsidies is a major budget challenge. However, reducing ${persona}'s emissions by even 5 tons saves the city $12,000 annually in public health costs and energy relief. The ROI on green zoning is positive over a 10-year horizon. We should pass the community micro-grid bond this November.`
+        }
+      ]
+    };
+  },
+
+  /**
+   * Generates a single 2035 story based on a custom system prompt to test prompt malleability.
+   */
+  async generateSingleStory(profile, systemPrompt, apiKey = null) {
+    try {
+      const userPrompt = `Carbon Profile:\nPersona: ${profile.personaName}\nEstimated CO2: ${profile.annualCo2} tons/year\nCity: ${profile.city}\nLeverage Points: ${profile.summaryStatement}`;
+      const response = await callGroq(systemPrompt, userPrompt, apiKey);
+      return response.unchangedPath || response.ecoloopPath || response.storyText || JSON.stringify(response);
+    } catch (err) {
+      console.warn("Groq API single story failed, falling back to local simulation:", err);
+    }
+
+    // Fallback simulation based on prompt keywords
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    const text = systemPrompt.toLowerCase();
+    if (text.includes("sarcastic") || text.includes("funny")) {
+      return `Welcome to 2035 in ${profile.city}! You're still breathing carbon-flavored air and sweating through synthetic shirts because you drove your gas guzzler to work in 2025. Your level of commitment is outstandingly lazy, but at least your tree is growing some virtual berries. Happy now?`;
+    } else if (text.includes("dystopian") || text.includes("dark")) {
+      return `July 2035. The skies over ${profile.city} are a permanently bruised orange. Ash floats quietly onto your windows. Your energy usage in 2025 has contributed to the grid breakdown. Every breath tastes of iron, a grim reminder of the choices made a decade ago.`;
+    } else if (text.includes("scientific") || text.includes("data")) {
+      return `Simulation parameters: Year 2035. Location: ${profile.city}. Environmental anomaly index: +2.1. Persona footprint registered at ${profile.annualCo2} tons/year. Data indicates rising humidity and increased thermal loading. Transit metrics remain in sub-optimal state.`;
+    } else {
+      return `In 2035, the sun shines over ${profile.city}, but there is a quiet shift in the air. The small steps you took back in 2025 have started to mature, weaving a cooler, cleaner fabric for your daily life. You travel through shaded streets, and your footprint is light.`;
     }
   }
 };

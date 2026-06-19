@@ -205,6 +205,9 @@ button, input, select, textarea {
   color: var(--color-plum);
   cursor: pointer;
   transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .quiz-option-pill:hover {
@@ -1546,3 +1549,373 @@ button, input, select, textarea {
     text-align: center;
   }
 }
+
+/* ==========================================================================
+   Advanced Hackathon Features CSS
+   ========================================================================== */
+
+/* Judge Sandbox Control Panel */
+.judge-sandbox-card {
+  background-color: var(--color-cream);
+  border: 1px solid var(--color-plum);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-editorial);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.sandbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(59, 30, 48, 0.15);
+  padding-bottom: 0.8rem;
+}
+
+.sandbox-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sandbox-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-plum);
+  background-color: #FAF4EB;
+  border: 1.2px solid var(--color-plum);
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  width: fit-content;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sandbox-title {
+  font-size: 1.25rem;
+  color: var(--color-plum);
+  margin: 0.2rem 0;
+}
+
+.sandbox-desc {
+  font-size: 0.8rem;
+  color: var(--color-charcoal);
+  opacity: 0.85;
+  margin: 0;
+}
+
+.sandbox-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn-sandbox {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid var(--color-plum);
+  background-color: var(--color-cream);
+  color: var(--color-plum);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 2px 2px 0px var(--color-plum);
+}
+
+.btn-sandbox:hover {
+  background-color: var(--color-plum);
+  color: var(--color-cream);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--color-plum);
+}
+
+.btn-sandbox:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--color-plum);
+}
+
+.btn-sandbox.btn-reset-stats {
+  background-color: #FAF4F4;
+  color: var(--color-terracotta);
+  border-color: var(--color-terracotta);
+  box-shadow: 2px 2px 0px var(--color-terracotta);
+}
+
+.btn-sandbox.btn-reset-stats:hover {
+  background-color: var(--color-terracotta);
+  color: var(--color-cream);
+  box-shadow: 3px 3px 0px var(--color-terracotta);
+}
+
+/* Fogg Behavior Model Drawer */
+.inspect-fogg-trigger {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-sage);
+  cursor: pointer;
+  margin-left: 0.4rem;
+  text-decoration: underline;
+  transition: var(--transition-smooth);
+}
+
+.inspect-fogg-trigger:hover {
+  color: var(--color-plum);
+}
+
+.fogg-analysis-drawer {
+  background-color: rgba(143, 168, 155, 0.08);
+  border: 1px solid rgba(143, 168, 155, 0.25);
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top;
+}
+
+@keyframes slideDown {
+  from { transform: scaleY(0.9); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+.fogg-model-header {
+  font-size: 0.75rem;
+  color: var(--color-plum);
+  border-bottom: 1px dashed rgba(59, 30, 48, 0.15);
+  padding-bottom: 0.3rem;
+}
+
+.fogg-metric-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.72rem;
+}
+
+.fogg-label {
+  width: 85px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.fogg-bar-container {
+  flex-grow: 1;
+  height: 7px;
+  background-color: rgba(59, 30, 48, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fogg-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.motivation-bar {
+  background-color: var(--color-terracotta);
+}
+
+.ability-bar {
+  background-color: var(--color-sage);
+}
+
+.prompt-bar {
+  background-color: #EAD9A4; /* soft gold */
+}
+
+.fogg-value {
+  width: 32px;
+  text-align: right;
+  font-weight: 700;
+  font-family: monospace;
+  color: var(--color-plum);
+}
+
+.fogg-summary-note {
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--color-charcoal);
+  opacity: 0.8;
+  margin: 0.2rem 0 0 0;
+}
+
+/* Prompt Main Column wrapper for Prompts Lab */
+.prompt-main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Agent Debate Card */
+.agent-debate-card {
+  background-color: var(--color-cream);
+  border: 1px solid var(--color-plum);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-editorial);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.agent-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border-bottom: 1px solid rgba(59, 30, 48, 0.15);
+  padding-bottom: 0.8rem;
+}
+
+.agent-card-title {
+  font-size: 1.25rem;
+  color: var(--color-plum);
+  margin: 0.2rem 0;
+}
+
+.agent-card-desc {
+  font-size: 0.8rem;
+  color: var(--color-charcoal);
+  opacity: 0.85;
+  margin: 0;
+}
+
+.agent-debate-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn-run-debate {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.debate-chat-window {
+  border: 1px solid var(--color-plum);
+  background-color: #FAF9F6;
+  border-radius: 8px;
+  padding: 1.2rem;
+  max-height: 380px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: inset 1px 1px 4px rgba(59, 30, 48, 0.05);
+}
+
+/* Dialogue chat bubbles */
+.debate-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: 85%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+}
+
+@keyframes bubblePop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.debate-bubble.optimist {
+  align-self: flex-start;
+  background-color: #E6F5EA;
+  border: 1px solid rgba(143, 168, 155, 0.3);
+  border-top-left-radius: 2px;
+}
+
+.debate-bubble.realist {
+  align-self: flex-end;
+  background-color: #FAF4F4;
+  border: 1px solid rgba(209, 139, 140, 0.3);
+  border-top-right-radius: 2px;
+}
+
+.debate-bubble.planner {
+  align-self: flex-start;
+  background-color: #FDFBF7;
+  border: 1px solid rgba(184, 142, 92, 0.3);
+  border-top-left-radius: 2px;
+  margin-left: 2rem;
+}
+
+.bubble-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.optimist .bubble-meta { color: #387A4F; }
+.realist .bubble-meta { color: var(--color-terracotta); }
+.planner .bubble-meta { color: #B88E5C; }
+
+.bubble-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  flex-shrink: 0;
+}
+
+.optimist .bubble-avatar { background-color: #387A4F; }
+.realist .bubble-avatar { background-color: var(--color-terracotta); }
+.planner .bubble-avatar { background-color: #B88E5C; }
+
+/* Custom Icon Fonts Styling */
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.font-icon {
+  font-size: 1rem;
+  vertical-align: middle;
+  line-height: 1;
+  position: relative;
+  top: -0.5px;
+}
+
+.pill-icon {
+  font-size: 0.95rem;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.bubble-avatar .material-symbols-outlined {
+  font-size: 11px;
+}
+
+

@@ -60,11 +60,11 @@ const QUIZ_QUESTIONS = [
     placeholder: "e.g., I drive an SUV to work 30 mins each way, or I walk and use the subway...",
     tip: "Be descriptive! Our AI reads transit modes and relative distances.",
     options: [
-      { label: "🚗 Drive Car", text: "I drive a personal car to get around daily." },
-      { label: "🚲 Bike / Cycle", text: "I cycle or ride a bike for my daily transit." },
-      { label: "🚌 Public Transit", text: "I use public transit like trains and buses for commuting." },
-      { label: "🚶 Walk on Foot", text: "I walk on foot to get where I need to go." },
-      { label: "✍️ Write my own...", text: "" }
+      { label: "Drive Car", icon: "directions_car", text: "I drive a personal car to get around daily." },
+      { label: "Bike / Cycle", icon: "pedal_bike", text: "I cycle or ride a bike for my daily transit." },
+      { label: "Public Transit", icon: "directions_bus", text: "I use public transit like trains and buses for commuting." },
+      { label: "Walk on Foot", icon: "directions_walk", text: "I walk on foot to get where I need to go." },
+      { label: "Write my own...", icon: "edit", text: "" }
     ]
   },
   {
@@ -74,11 +74,11 @@ const QUIZ_QUESTIONS = [
     placeholder: "e.g., I eat beef or poultry most days, or I'm mostly vegetarian with dairy...",
     tip: "Dietary agriculture accounts for nearly 20% of global emissions.",
     options: [
-      { label: "🥩 Meat Eater", text: "I eat meat like chicken or beef in most of my meals." },
-      { label: "🥗 Vegetarian", text: "I follow a vegetarian diet, eating no meat but some dairy." },
-      { label: "🌱 Vegan", text: "I eat a strict plant-based vegan diet with no animal products." },
-      { label: "🐟 Pescatarian", text: "I eat fish and seafood but avoid red meat and poultry." },
-      { label: "✍️ Write my own...", text: "" }
+      { label: "Meat Eater", icon: "restaurant", text: "I eat meat like chicken or beef in most of my meals." },
+      { label: "Vegetarian", icon: "spa", text: "I follow a vegetarian diet, eating no meat but some dairy." },
+      { label: "Vegan", icon: "grass", text: "I eat a strict plant-based vegan diet with no animal products." },
+      { label: "Pescatarian", icon: "set_meal", text: "I eat fish and seafood but avoid red meat and poultry." },
+      { label: "Write my own...", icon: "edit", text: "" }
     ]
   },
   {
@@ -88,10 +88,10 @@ const QUIZ_QUESTIONS = [
     placeholder: "e.g., None, or about 2-3 holiday flights, or monthly business travel...",
     tip: "A single long-haul flight can match a whole year's transit carbon.",
     options: [
-      { label: "✈️ Few Flights (1-3)", text: "I fly a few times a year, mostly for holidays (1 to 3 flights)." },
-      { label: "💼 Frequent Business (6+)", text: "I travel frequently by air for business, taking 6 or more flights annually." },
-      { label: "🚂 Rarely Fly (0-1)", text: "I rarely fly, taking zero or at most one flight a year." },
-      { label: "✍️ Write my own...", text: "" }
+      { label: "Few Flights (1-3)", icon: "flight", text: "I fly a few times a year, mostly for holidays (1 to 3 flights)." },
+      { label: "Frequent Business (6+)", icon: "work", text: "I travel frequently by air for business, taking 6 or more flights annually." },
+      { label: "Rarely Fly (0-1)", icon: "train", text: "I rarely fly, taking zero or at most one flight a year." },
+      { label: "Write my own...", icon: "edit", text: "" }
     ]
   },
   {
@@ -101,10 +101,10 @@ const QUIZ_QUESTIONS = [
     placeholder: "e.g., We use standard grid power with gas heating, or we have rooftop solar and heat pumps...",
     tip: "Residential efficiency depends on insulation, thermal settings, and sources.",
     options: [
-      { label: "🔥 Grid Power & Gas", text: "My home uses standard grid electricity and natural gas heating." },
-      { label: "☀️ Solar & Heat Pump", text: "We use renewable solar panels and an electric heat pump." },
-      { label: "🏢 Apartment Heating", text: "I live in a shared apartment complex with central steam heating." },
-      { label: "✍️ Write my own...", text: "" }
+      { label: "Grid Power & Gas", icon: "power", text: "My home uses standard grid electricity and natural gas heating." },
+      { label: "Solar & Heat Pump", icon: "solar_power", text: "We use renewable solar panels and an electric heat pump." },
+      { label: "Apartment Heating", icon: "apartment", text: "I live in a shared apartment complex with central steam heating." },
+      { label: "Write my own...", icon: "edit", text: "" }
     ]
   },
   {
@@ -114,12 +114,12 @@ const QUIZ_QUESTIONS = [
     placeholder: "e.g., London, San Francisco, Sydney, New York...",
     tip: "This links your Time Machine stories to actual municipal climate projections.",
     options: [
-      { label: "🗽 New York", text: "New York" },
-      { label: "🌁 San Francisco", text: "San Francisco" },
-      { label: "🇬🇧 London", text: "London" },
-      { label: "🗼 Tokyo", text: "Tokyo" },
-      { label: "🐨 Sydney", text: "Sydney" },
-      { label: "✍️ Write my own...", text: "" }
+      { label: "New York", icon: "location_city", text: "New York" },
+      { label: "San Francisco", icon: "location_city", text: "San Francisco" },
+      { label: "London", icon: "location_city", text: "London" },
+      { label: "Tokyo", icon: "location_city", text: "Tokyo" },
+      { label: "Sydney", icon: "location_city", text: "Sydney" },
+      { label: "Write my own...", icon: "edit", text: "" }
     ]
   }
 ];
@@ -223,6 +223,16 @@ class EcoLoopApp {
     // Global reset
     this.btnResetGlobal = document.getElementById("btn-reset-global");
 
+    // Sandbox DOM references
+    this.btnSbLevelUp = document.getElementById("btn-sb-level-up");
+    this.btnSbStreakUp = document.getElementById("btn-sb-streak-up");
+    this.btnSbWeekUp = document.getElementById("btn-sb-week-up");
+    this.btnSbReset = document.getElementById("btn-sb-reset");
+
+    // Agent debate DOM references
+    this.btnTriggerDebate = document.getElementById("btn-trigger-debate");
+    this.debateChatContainer = document.getElementById("debate-chat-container");
+
     // Reflection modal / overlay
     this.reflectionModal = document.getElementById("reflection-modal");
     this.reflectionModalText = document.getElementById("reflection-modal-text");
@@ -276,6 +286,25 @@ class EcoLoopApp {
         this.render();
       }
     });
+
+    // Sandbox events
+    if (this.btnSbLevelUp) {
+      this.btnSbLevelUp.addEventListener("click", () => this.handleSandboxLevelUp());
+    }
+    if (this.btnSbStreakUp) {
+      this.btnSbStreakUp.addEventListener("click", () => this.handleSandboxStreakUp());
+    }
+    if (this.btnSbWeekUp) {
+      this.btnSbWeekUp.addEventListener("click", () => this.handleSandboxWeekUp());
+    }
+    if (this.btnSbReset) {
+      this.btnSbReset.addEventListener("click", () => this.handleSandboxReset());
+    }
+
+    // Agent debate events
+    if (this.btnTriggerDebate) {
+      this.btnTriggerDebate.addEventListener("click", () => this.handleTriggerDebate());
+    }
 
     // SVG bloom clicks
     this.treeSvg.addEventListener("click", (e) => {
@@ -344,7 +373,16 @@ class EcoLoopApp {
       q.options.forEach(opt => {
         const pill = document.createElement("button");
         pill.className = "quiz-option-pill";
-        pill.textContent = opt.label;
+        
+        if (opt.icon) {
+          const iconSpan = document.createElement("span");
+          iconSpan.className = "material-symbols-outlined pill-icon";
+          iconSpan.textContent = opt.icon;
+          pill.appendChild(iconSpan);
+        }
+        
+        const labelText = document.createTextNode(opt.icon ? " " + opt.label : opt.label);
+        pill.appendChild(labelText);
         
         // Active highlight if current input exactly matches the predefined text
         if (prevAnswer === opt.text && opt.text !== "") {
@@ -856,6 +894,7 @@ class EcoLoopApp {
       
       // Select technique icon or initials
       const techniqueShort = nudge.behavioralTechnique.split(" ").map(w => w[0]).join("");
+      const fogg = nudge.foggMetrics || { motivation: 75, ability: 80, prompt: 95 };
 
       card.innerHTML = `
         <div class="nudge-checkbox-wrapper">
@@ -875,7 +914,38 @@ class EcoLoopApp {
             <span class="technique-tag" title="Behavioral Science: ${nudge.behavioralTechnique}">
               <span class="tag-icon">${techniqueShort}</span>${nudge.behavioralTechnique}
             </span>
-            <p class="technique-explanation">${nudge.scientificExplanation}</p>
+            <p class="technique-explanation">
+              ${nudge.scientificExplanation}
+              <span class="inspect-fogg-trigger" data-index="${index}">[🔍 Behavioral Model Analysis]</span>
+            </p>
+            
+            <div id="fogg-drawer-${index}" class="fogg-analysis-drawer hidden">
+              <div class="fogg-model-header">
+                <strong>Fogg Behavior Model:</strong> <code>B = M × A × P</code> (Behavior = Motivation × Ability × Prompt)
+              </div>
+              <div class="fogg-metric-row">
+                <span class="fogg-label">Motivation (M)</span>
+                <div class="fogg-bar-container">
+                  <div class="fogg-bar-fill motivation-bar" style="width: ${fogg.motivation}%"></div>
+                </div>
+                <span class="fogg-value">${fogg.motivation}%</span>
+              </div>
+              <div class="fogg-metric-row">
+                <span class="fogg-label">Ability (A)</span>
+                <div class="fogg-bar-container">
+                  <div class="fogg-bar-fill ability-bar" style="width: ${fogg.ability}%"></div>
+                </div>
+                <span class="fogg-value">${fogg.ability}%</span>
+              </div>
+              <div class="fogg-metric-row">
+                <span class="fogg-label">Prompt (P)</span>
+                <div class="fogg-bar-container">
+                  <div class="fogg-bar-fill prompt-bar" style="width: ${fogg.prompt}%"></div>
+                </div>
+                <span class="fogg-value">${fogg.prompt}%</span>
+              </div>
+              <p class="fogg-summary-note">Based on BJ Fogg's behavior design, this nudge maximizes <strong>Ability</strong> by reducing friction, matching your current <strong>Motivation</strong>, and placing a visual <strong>Prompt</strong> directly on your Living Tree.</p>
+            </div>
           </div>
         </div>
       `;
@@ -884,14 +954,26 @@ class EcoLoopApp {
       const checkbox = card.querySelector(".nudge-checkbox");
       checkbox.addEventListener("change", () => this.toggleNudgeCompletion(index));
 
-      // Make clicking the text toggle as well
+      // Make clicking the text toggle as well (exclude trigger or drawer clicks)
       const content = card.querySelector(".nudge-content");
       content.addEventListener("click", (e) => {
-        if (!e.target.closest("label") && !e.target.closest("input")) {
+        if (!e.target.closest("label") && !e.target.closest("input") && !e.target.closest(".inspect-fogg-trigger") && !e.target.closest(".fogg-analysis-drawer")) {
           checkbox.checked = !checkbox.checked;
           this.toggleNudgeCompletion(index);
         }
       });
+
+      // Bind Fogg drawer trigger click
+      const foggTrigger = card.querySelector(".inspect-fogg-trigger");
+      if (foggTrigger) {
+        foggTrigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const drawer = card.querySelector(`#fogg-drawer-${index}`);
+          if (drawer) {
+            drawer.classList.toggle("hidden");
+          }
+        });
+      }
 
       this.nudgesContainer.appendChild(card);
     });
@@ -936,6 +1018,190 @@ class EcoLoopApp {
       `;
       this.journalHistoryContainer.appendChild(entry);
     });
+  }
+
+  handleSandboxLevelUp() {
+    this.state.xp += 150;
+    // Recalculate level
+    const nextLevelThreshold = this.state.level * 100;
+    if (this.state.xp >= nextLevelThreshold) {
+      this.state.level++;
+      this.triggerStatsAnimation("stat-level");
+    }
+    this.triggerStatsAnimation("stat-xp");
+    storage.saveState(this.state);
+    this.render();
+    playChime(true);
+  }
+
+  handleSandboxStreakUp() {
+    this.state.streak += 1;
+    this.triggerStatsAnimation("stat-streak");
+    storage.saveState(this.state);
+    this.render();
+    playChime(true);
+  }
+
+  async handleSandboxWeekUp() {
+    // Complete all current nudges to simulate a perfect week
+    const completed = [];
+    const activeNudges = this.state.nudges || [];
+    activeNudges.forEach(n => {
+      n.completed = true;
+      completed.push(n);
+    });
+
+    const xpEarned = completed.reduce((acc, curr) => acc + (curr.effort === "Easy" ? 25 : curr.effort === "Medium" ? 45 : 70), 0);
+    this.state.xp += xpEarned;
+    
+    // Level up check
+    while (this.state.xp >= this.state.level * 100) {
+      this.state.level++;
+      this.triggerStatsAnimation("stat-level");
+    }
+
+    this.state.streak += 1;
+    
+    const mockReflections = [
+      "Your choices this week set off a chain reaction. By driving less and selecting local crops, your 2035 future self feels a cool breeze where wildfire smoke once hung.",
+      "A remarkable display of micro-habits. Your dedication to clean energy transit and smart appliances has reinforced your city's local power grid in 2035.",
+      "Autonomy and consistency combine. By skipping flight connections and adopting diet adjustments, you are shifting the municipal carbon index towards sustainability."
+    ];
+    const reflectionText = mockReflections[this.state.currentWeek % mockReflections.length];
+
+    // Push history
+    this.state.history.push({
+      week: this.state.currentWeek,
+      completedActionsCount: completed.length,
+      totalActionsCount: 3,
+      reflectionText: reflectionText,
+      xpEarned: xpEarned,
+      timestamp: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric" })
+    });
+
+    this.state.currentWeek++;
+    
+    // Generate new weekly nudges
+    this.state.nudges = simulation.generateWeeklyNudges(this.state.profile);
+    storage.saveState(this.state);
+
+    this.triggerStatsAnimation("stat-week");
+    this.triggerStatsAnimation("stat-streak");
+    this.triggerStatsAnimation("stat-xp");
+
+    // Populate reflection modal details
+    this.reflectionModal.classList.remove("hidden");
+    this.reflectionLoading.classList.add("hidden");
+    this.reflectionLoaded.classList.remove("hidden");
+    document.getElementById("modal-title").textContent = `End of Week ${this.state.currentWeek - 1} Reflections (Simulated)`;
+    this.reflectionModalText.textContent = reflectionText;
+
+    this.render();
+    playChime(true);
+  }
+
+  handleSandboxReset() {
+    if (confirm("Reset only stats (XP, level, streak, week, history) back to onboarding base? (Prompt configurations remain unchanged)")) {
+      this.state.xp = 0;
+      this.state.level = 1;
+      this.state.streak = 0;
+      this.state.currentWeek = 1;
+      this.state.history = [];
+      this.state.completedNudgesCount = 0;
+      this.state.nudges = simulation.generateWeeklyNudges(this.state.profile);
+      storage.saveState(this.state);
+      this.render();
+      playChime(false);
+    }
+  }
+
+  async handleTriggerDebate() {
+    if (!this.state.profile) {
+      alert("Please complete onboarding first before running timeline debates.");
+      return;
+    }
+
+    const btn = this.btnTriggerDebate;
+    const chatContainer = this.debateChatContainer;
+
+    btn.disabled = true;
+    btn.textContent = "Orchestrating Agents...";
+    chatContainer.classList.remove("hidden");
+    chatContainer.innerHTML = `<div class="empty-nudges" id="debate-loader">Pinging AI nodes and compiling carbon profile dimensions...</div>`;
+    chatContainer.scrollIntoView({ behavior: "smooth" });
+
+    try {
+      const activePrompts = this.getActivePromptsText();
+      const response = await simulation.generateAgentDebate(this.state.profile, activePrompts, this.state.apiKey);
+      
+      const loader = chatContainer.querySelector("#debate-loader");
+      if (loader) loader.remove();
+
+      const turns = response.turns || [];
+      if (turns.length === 0) {
+        chatContainer.innerHTML = `<div class="empty-nudges" style="color: var(--color-terracotta);">Simulation debate returned no turns. Verify your API configuration.</div>`;
+        btn.disabled = false;
+        btn.textContent = "Start Multi-Agent Debate";
+        return;
+      }
+
+      // Print bubbles with typewriter effect and delay
+      for (let i = 0; i < turns.length; i++) {
+        const turn = turns[i];
+        
+        // Wait between turns
+        if (i > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+
+        const bubble = document.createElement("div");
+        let agentClass = "optimist";
+        let avatarText = "eco";
+        if (turn.agent.toLowerCase().includes("realist")) {
+          agentClass = "realist";
+          avatarText = "thermostat";
+        } else if (turn.agent.toLowerCase().includes("planner") || turn.agent.toLowerCase().includes("policy")) {
+          agentClass = "planner";
+          avatarText = "account_balance";
+        }
+
+        bubble.className = `debate-bubble ${agentClass}`;
+        bubble.innerHTML = `
+          <div class="bubble-meta">
+            <span class="bubble-avatar"><span class="material-symbols-outlined">${avatarText}</span></span>
+            <span>${turn.agent}</span>
+          </div>
+          <div class="bubble-text"></div>
+        `;
+        
+        chatContainer.appendChild(bubble);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Typewriter text printing
+        const textElement = bubble.querySelector(".bubble-text");
+        const fullText = turn.text;
+        let charIndex = 0;
+        
+        await new Promise((resolve) => {
+          const timer = setInterval(() => {
+            if (charIndex < fullText.length) {
+              textElement.textContent += fullText.charAt(charIndex);
+              charIndex++;
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+            } else {
+              clearInterval(timer);
+              resolve();
+            }
+          }, 15); // Type speed
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      chatContainer.innerHTML += `<div class="empty-nudges" style="color: var(--color-terracotta);">Error conducting debate simulation: ${err.message}</div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Start Multi-Agent Debate";
+    }
   }
 }
 

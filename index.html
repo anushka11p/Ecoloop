@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -104,7 +105,8 @@
       <main class="content-container">
 
         <!-- TAB 1: DASHBOARD -->
-        <div id="tab-dashboard" class="dashboard-grid">
+        <div id="tab-dashboard">
+          <div class="dashboard-grid">
           
           <!-- COLUMN 1: TIME MACHINE STORYTELLER -->
           <section class="dashboard-col time-machine-column">
@@ -211,6 +213,32 @@
 
         </div>
 
+        <!-- JUDGE SANDBOX CONTROLS PANEL -->
+        <div class="judge-sandbox-card">
+          <div class="sandbox-header">
+            <div class="sandbox-title-group">
+              <span class="sandbox-badge"><span class="material-symbols-outlined font-icon">workspace_premium</span> Hackathon Demo Tool</span>
+              <h3 class="sandbox-title logo-serif">Judge Time-Travel Sandbox</h3>
+              <p class="sandbox-desc">Simulate weeks of consistent habits instantly to witness how the organic Living Tree blooms and the 2035 future city story transforms.</p>
+            </div>
+          </div>
+          <div class="sandbox-actions">
+            <button class="btn-sandbox btn-level-up" id="btn-sb-level-up">
+              <span><span class="material-symbols-outlined font-icon">bolt</span> Add +150 XP (Grow Leaves)</span>
+            </button>
+            <button class="btn-sandbox btn-streak-up" id="btn-sb-streak-up">
+              <span><span class="material-symbols-outlined font-icon">local_fire_department</span> Add +1 Streak Week (Grow Fruits)</span>
+            </button>
+            <button class="btn-sandbox btn-week-up" id="btn-sb-week-up">
+              <span><span class="material-symbols-outlined font-icon">filter_vintage</span> Complete Week (Grow Gold Blossoms)</span>
+            </button>
+            <button class="btn-sandbox btn-reset-stats" id="btn-sb-reset">
+              <span><span class="material-symbols-outlined font-icon">restart_alt</span> Reset Stats</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
         <!-- TAB 2: PROMPT ARCHITECTURE LAB -->
         <div id="tab-prompts" class="prompts-grid hidden">
           <div class="prompts-sidebar">
@@ -238,23 +266,45 @@
             </div>
           </div>
 
-          <div class="prompt-editor-panel">
-            <div class="editor-header">
-              <h3 id="prompt-title" class="editor-title logo-serif">Layer 1: Conversational Onboarding Parser</h3>
-              <span id="prompt-model" class="model-badge">Behavioral Model: Cognitive Load Reduction</span>
-            </div>
+          <div class="prompt-main-column">
             
-            <p id="prompt-desc" class="prompt-explanation">Instead of forms, this prompt converts raw conversational inputs into numeric footprint dimensions.</p>
-            
-            <div class="editor-body">
-              <label for="prompt-system-text" class="editor-label">System Prompt</label>
-              <textarea id="prompt-system-text" class="prompt-textarea" spellcheck="false"></textarea>
+            <div class="prompt-editor-panel">
+              <div class="editor-header">
+                <h3 id="prompt-title" class="editor-title logo-serif">Layer 1: Conversational Onboarding Parser</h3>
+                <span id="prompt-model" class="model-badge">Behavioral Model: Cognitive Load Reduction</span>
+              </div>
+              
+              <p id="prompt-desc" class="prompt-explanation">Instead of forms, this prompt converts raw conversational inputs into numeric footprint dimensions.</p>
+              
+              <div class="editor-body">
+                <label for="prompt-system-text" class="editor-label">System Prompt</label>
+                <textarea id="prompt-system-text" class="prompt-textarea" spellcheck="false"></textarea>
+              </div>
+              
+              <div class="editor-footer">
+                <button id="btn-restore-prompts" class="btn-secondary">Reset Defaults</button>
+                <button id="btn-save-prompt" class="btn-primary">Save Prompt Changes</button>
+              </div>
             </div>
-            
-            <div class="editor-footer">
-              <button id="btn-restore-prompts" class="btn-secondary">Reset Defaults</button>
-              <button id="btn-save-prompt" class="btn-primary">Save Prompt Changes</button>
+
+            <!-- NEW: MULTI-AGENT TIMELINE DEBATE PANEL -->
+            <div class="agent-debate-card">
+              <div class="agent-card-header">
+              <span class="sandbox-badge"><span class="material-symbols-outlined font-icon">smart_toy</span> Agentic Multi-Agent Orchestration</span>
+              <h3 class="agent-card-title logo-serif">Agentic Timeline Projections</h3>
+                <p class="agent-card-desc">Trigger a collaborative debate between three specialized AI agents to analyze your current carbon footprint choices and future trajectory.</p>
+              </div>
+              <div class="agent-debate-actions">
+                <button id="btn-trigger-debate" class="btn-primary btn-run-debate">
+                  <span>Start Multi-Agent Debate</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+              </div>
+              <div id="debate-chat-container" class="debate-chat-window hidden">
+                <!-- Chat bubbles will go here -->
+              </div>
             </div>
+
           </div>
         </div>
 
