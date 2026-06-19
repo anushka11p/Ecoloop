@@ -1048,6 +1048,77 @@ button, input, select, textarea {
   line-height: 1.5;
 }
 
+/* API Key Card Styling */
+.api-key-card {
+  background-color: var(--color-plum-light);
+  border: 1px solid var(--color-plum);
+  border-radius: 8px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.api-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-plum);
+}
+
+.api-card-desc {
+  font-size: 0.76rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.api-key-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input-password {
+  flex-grow: 1;
+  font-family: monospace;
+  font-size: 0.82rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-plum);
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  outline: none;
+}
+
+.btn-key-action {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  box-shadow: 1.5px 1.5px 0px var(--color-plum);
+}
+
+.api-status-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 0.3rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
+}
+
+.api-status-badge.inactive {
+  background-color: #FAF4EB;
+  color: #B88E5C;
+  border-color: rgba(184, 142, 92, 0.3);
+}
+
+.api-status-badge.active {
+  background-color: #E6F5EA;
+  color: #387A4F;
+  border-color: rgba(143, 168, 155, 0.4);
+}
+
 .prompt-selector-wrapper {
   display: flex;
   flex-direction: column;

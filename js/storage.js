@@ -23,7 +23,8 @@ const DEFAULT_STATE = {
   completedNudgesCount: 0,
   nudges: [],
   history: [],
-  customPrompts: {} // Stores overrides to prompt layers
+  customPrompts: {}, // Stores overrides to prompt layers
+  apiKey: "" // Stores optional Gemini API key
 };
 
 export const storage = {

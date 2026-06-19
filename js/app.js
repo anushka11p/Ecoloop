@@ -129,8 +129,20 @@ class EcoLoopApp {
     this.state = storage.loadState();
     this.onboardingStep = 0; // 0 to 4
     this.activeTab = "dashboard"; // dashboard, prompts, journal
+    this.serverHasKey = false;
+    this.localDevKeyActive = false;
+    
+    try {
+      if (import.meta.env.VITE_GROQ_API_KEY) {
+        this.localDevKeyActive = true;
+      }
+    } catch (e) {
+      // outside Vite context
+    }
+    
     this.initDOMElements();
     this.bindEvents();
+    this.checkServerApiKey();
     this.render();
   }
 
@@ -199,6 +211,11 @@ class EcoLoopApp {
     this.promptSystemText = document.getElementById("prompt-system-text");
     this.btnSavePrompt = document.getElementById("btn-save-prompt");
     this.btnRestorePrompts = document.getElementById("btn-restore-prompts");
+    
+    // API key nodes
+    this.apiKeyInput = document.getElementById("api-key-input");
+    this.btnSaveKey = document.getElementById("btn-save-key");
+    this.apiKeyStatus = document.getElementById("api-key-status");
 
     // Reflections history node
     this.journalHistoryContainer = document.getElementById("journal-history-container");
@@ -239,6 +256,11 @@ class EcoLoopApp {
     this.promptSelect.addEventListener("change", (e) => this.loadSelectedPrompt(e.target.value));
     this.btnSavePrompt.addEventListener("click", () => this.savePromptEdit());
     this.btnRestorePrompts.addEventListener("click", () => this.restoreDefaultPrompts());
+
+    // API key save click
+    if (this.btnSaveKey) {
+      this.btnSaveKey.addEventListener("click", () => this.saveApiKey());
+    }
 
     // Reflection Modal Close
     this.btnModalClose.addEventListener("click", () => {
@@ -416,7 +438,7 @@ class EcoLoopApp {
 
     try {
       const activePrompts = this.getActivePromptsText();
-      const results = await simulation.parseOnboarding(this.state.answers, activePrompts);
+      const results = await simulation.parseOnboarding(this.state.answers, activePrompts, this.state.apiKey);
       
       this.state.profile = results.profile;
       this.state.unchangedStory = results.unchangedStory;
@@ -508,7 +530,8 @@ class EcoLoopApp {
         missed,
         this.state.streak,
         completed.length * 30, // Simulated XP this turn
-        activePrompts
+        activePrompts,
+        this.state.apiKey
       );
 
       // Update streaks
@@ -617,7 +640,7 @@ class EcoLoopApp {
     if (!this.state.onboarded) return;
     
     // Run silent recalculations to apply edited prompts to stories
-    const results = await simulation.parseOnboarding(this.state.answers, this.state.customPrompts);
+    const results = await simulation.parseOnboarding(this.state.answers, this.state.customPrompts, this.state.apiKey);
     this.state.unchangedStory = results.unchangedStory;
     this.state.ecoloopStory = results.ecoloopStory;
     storage.saveState(this.state);
@@ -625,6 +648,80 @@ class EcoLoopApp {
     // Refresh display
     this.renderStories();
     this.updateTimeMachineBlend();
+  }
+
+  saveApiKey() {
+    if (!this.apiKeyInput) return;
+    const key = this.apiKeyInput.value.trim();
+    this.state.apiKey = key;
+    storage.saveState(this.state);
+    
+    this.updateApiKeyStatus();
+    
+    // Quick visual feedback
+    const btn = this.btnSaveKey;
+    btn.textContent = "Saved!";
+    btn.style.backgroundColor = "#8FA89B";
+    btn.style.color = "#FDFBF7";
+    playChime(true);
+    
+    // Refresh calculations if key changed
+    this.recalculateProfilesWithUpdatedPrompts();
+    
+    setTimeout(() => {
+      btn.textContent = "Save";
+      btn.style.backgroundColor = "";
+      btn.style.color = "";
+    }, 1500);
+  }
+
+  async checkServerApiKey() {
+    try {
+      const response = await fetch("/api/status");
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.hasKey) {
+          this.serverHasKey = true;
+          this.updateApiKeyStatus();
+        }
+      }
+    } catch (e) {
+      // Local dev or proxy not running
+    }
+  }
+
+  updateApiKeyStatus() {
+    if (!this.apiKeyInput || !this.apiKeyStatus) return;
+    const key = this.state.apiKey || "";
+    this.apiKeyInput.value = key;
+    
+    const desc = document.querySelector(".api-card-desc");
+    
+    if (key) {
+      this.apiKeyStatus.textContent = "Status: Real Groq AI Active";
+      this.apiKeyStatus.className = "api-status-badge active";
+      if (desc) {
+        desc.textContent = "Real Groq AI is active using your manual browser API key.";
+      }
+    } else if (this.localDevKeyActive) {
+      this.apiKeyStatus.textContent = "Status: Local Env AI Active";
+      this.apiKeyStatus.className = "api-status-badge active";
+      if (desc) {
+        desc.textContent = "Real Groq AI is active using your local .env configuration key.";
+      }
+    } else if (this.serverHasKey) {
+      this.apiKeyStatus.textContent = "Status: Cloud AI Active";
+      this.apiKeyStatus.className = "api-status-badge active";
+      if (desc) {
+        desc.textContent = "Real Groq AI is active using the secure server API key. No key configuration is required from you.";
+      }
+    } else {
+      this.apiKeyStatus.textContent = "Status: Local Simulation Active";
+      this.apiKeyStatus.className = "api-status-badge inactive";
+      if (desc) {
+        desc.textContent = "Enter your Groq Key to run real Llama-3.3 generations. Key is stored locally in your browser.";
+      }
+    }
   }
 
   getActivePromptsText() {
@@ -638,6 +735,7 @@ class EcoLoopApp {
 
   // MAIN PAGE RENDERERS
   render() {
+    this.updateApiKeyStatus();
     if (!this.state.onboarded) {
       // Display onboarding flow
       this.onboardingSection.classList.remove("hidden");

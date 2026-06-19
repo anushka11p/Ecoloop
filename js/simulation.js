@@ -195,11 +195,112 @@ function evaluatePromptModifiers(customPrompts) {
   return modifiers;
 }
 
+async function callGroq(systemPrompt, userPrompt, apiKey = null) {
+  // Check if a client-side override key is passed in, OR if a local dev key is defined in the Vite environment.
+  let activeKey = apiKey;
+  
+  if (!activeKey) {
+    try {
+      activeKey = import.meta.env.VITE_GROQ_API_KEY || "";
+    } catch (e) {
+      // outside Vite context
+    }
+  }
+
+  if (activeKey) {
+    const url = "https://api.groq.com/openai/v1/chat/completions";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${activeKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Groq API returned error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const text = data.choices[0].message.content;
+    return cleanAndParseJson(text);
+  }
+
+  // Otherwise, use the secure serverless proxy endpoint
+  const response = await fetch("/api/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ systemPrompt, userPrompt })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Serverless proxy returned error: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  const text = data.choices[0].message.content;
+  return cleanAndParseJson(text);
+}
+
+function cleanAndParseJson(text) {
+  let cleaned = text.trim();
+  if (cleaned.startsWith("```json")) {
+    cleaned = cleaned.substring(7);
+  }
+  if (cleaned.startsWith("```")) {
+    cleaned = cleaned.substring(3);
+  }
+  if (cleaned.endsWith("```")) {
+    cleaned = cleaned.substring(0, cleaned.length - 3);
+  }
+  return JSON.parse(cleaned.trim());
+}
+
 export const simulation = {
   /**
    * Parses onboarding responses to calculate emissions metrics and select a persona
    */
-  async parseOnboarding(answers, customPrompts) {
+  async parseOnboarding(answers, customPrompts, apiKey = null) {
+    try {
+      const onboardingUserText = `Onboarding Answers:\nCommute: ${answers.commute}\nDiet: ${answers.diet}\nFlights: ${answers.flights}\nEnergy: ${answers.energy}\nCity: ${answers.city}`;
+      
+      const profile = await callGroq(customPrompts.onboarding, onboardingUserText, apiKey);
+      
+      const storytellerUserText = `Carbon Profile:\nPersona: ${profile.personaName}\nEstimated CO2: ${profile.annualCo2} tons/year\nCity: ${profile.city}\nLeverage Points: ${profile.summaryStatement}`;
+      
+      const stories = await callGroq(customPrompts.timeMachine, storytellerUserText, apiKey);
+      
+      return {
+        profile: {
+          annualCo2: Number(profile.annualCo2) || 10.0,
+          transitMetric: profile.transitMetric || "Medium",
+          dietMetric: profile.dietMetric || "Medium",
+          flightMetric: profile.flightMetric || "Medium",
+          energyMetric: profile.energyMetric || "Medium",
+          personaName: profile.personaName || "The Active Commuter",
+          city: profile.city || answers.city,
+          summaryStatement: profile.summaryStatement || "Your carbon profile represents balanced modern living.",
+          isVegan: !!(profile.isVegan || answers.diet.toLowerCase().includes("vegan")),
+          isVegetarian: !!(profile.isVegetarian || answers.diet.toLowerCase().includes("vegetarian") || answers.diet.toLowerCase().includes("vegan"))
+        },
+        unchangedStory: stories.unchangedPath,
+        ecoloopStory: stories.ecoloopPath
+      };
+    } catch (err) {
+      console.warn("Groq API call failed or not configured, falling back to local simulation:", err);
+    }
+
     // Simulate AI loading delay
     await new Promise((resolve) => setTimeout(resolve, 1800));
 
@@ -609,7 +710,15 @@ export const simulation = {
   /**
    * Generates the weekly reflection journal text based on completed and missed nudges.
    */
-  async generateReflection(completedNudges, missedNudges, streak, xpEarned, customPrompts) {
+  async generateReflection(completedNudges, missedNudges, streak, xpEarned, customPrompts, apiKey = null) {
+    try {
+      const userText = `Weekly Actions:\nCompleted: ${completedNudges.map(n => n.title).join(", ") || "None"}\nMissed: ${missedNudges.map(n => n.title).join(", ") || "None"}\nActive Streak: ${streak} weeks\nXP Earned: ${xpEarned} XP`;
+      const reflection = await callGroq(customPrompts.reflection, userText, apiKey);
+      return reflection.reflectionText;
+    } catch (err) {
+      console.warn("Groq API reflection call failed, falling back to local simulation:", err);
+    }
+
     // Simulate AI loading delay
     await new Promise((resolve) => setTimeout(resolve, 1400));
 
