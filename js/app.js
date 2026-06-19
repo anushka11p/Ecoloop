@@ -677,7 +677,7 @@ class EcoLoopApp {
 
   async checkServerApiKey() {
     try {
-      const response = await fetch("/api/status");
+      const response = await fetch("/generation/status");
       if (response.ok) {
         const data = await response.json();
         if (data && data.hasKey) {

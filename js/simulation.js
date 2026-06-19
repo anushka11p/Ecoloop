@@ -197,11 +197,11 @@ function evaluatePromptModifiers(customPrompts) {
 
 async function callGroq(systemPrompt, userPrompt, apiKey = null) {
   // Check if a client-side override key is passed in, OR if a local dev key is defined in the Vite environment.
-  let activeKey = apiKey;
+  let activeKey = apiKey ? apiKey.trim() : "";
   
   if (!activeKey) {
     try {
-      activeKey = import.meta.env.VITE_GROQ_API_KEY || "";
+      activeKey = (import.meta.env.VITE_GROQ_API_KEY || "").trim();
     } catch (e) {
       // outside Vite context
     }
@@ -236,7 +236,7 @@ async function callGroq(systemPrompt, userPrompt, apiKey = null) {
   }
 
   // Otherwise, use the secure serverless proxy endpoint
-  const response = await fetch("/api/generate", {
+  const response = await fetch("/generation/generate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
