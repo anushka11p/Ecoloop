@@ -1,0 +1,24 @@
+{
+  "name": "ecoloop",
+  "version": "1.0.0",
+  "description": "EcoLoop - AI-driven behavior-change carbon footprint platform",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "carbon",
+    "behavior-change",
+    "gamification",
+    "ai",
+    "prompt-architecture"
+  ],
+  "author": "EcoLoop Team",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

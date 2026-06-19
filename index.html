@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoLoop — AI Behavioral Carbon Platform</title>
+  <!-- Google Fonts for premium editorial feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- PAGE CONTAINER -->
+  <div class="app-container">
+
+    <!-- ONBOARDING SECTION (Shown when user is not onboarded) -->
+    <section id="onboarding-section" class="onboarding-overlay">
+      <div class="onboarding-content">
+        <header class="onboarding-header">
+          <h1 class="logo-serif">EcoLoop</h1>
+          <p class="tagline-editorial">The anti-calculator carbon loop. We change behavior, not track metrics.</p>
+        </header>
+
+        <!-- Dynamic Question Card -->
+        <div id="quiz-card" class="quiz-card">
+          <div class="progress-bar-container">
+            <div id="onboarding-progress" class="progress-bar"></div>
+          </div>
+          <div class="card-inner">
+            <div class="question-header">
+              <span id="quiz-title" class="question-number">1. The Commute</span>
+              <button id="btn-back" class="btn-text-back invisible" aria-label="Go back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                Back
+              </button>
+            </div>
+            <h2 id="quiz-question" class="question-text">How do you get around daily?</h2>
+            <div id="quiz-options-container" class="quiz-options-container"></div>
+            <div class="input-wrapper">
+              <textarea id="quiz-input" placeholder="e.g., I drive an SUV to work 30 mins each way, or I walk and use the subway..." autofocus></textarea>
+            </div>
+            <div class="question-footer">
+              <p id="quiz-tip" class="question-tip">Be descriptive! Our AI reads transit modes and relative distances.</p>
+              <button id="btn-next" class="btn-primary">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onboarding Loader (Simulating AI compiling profile) -->
+        <div id="onboarding-loader" class="onboarding-loader-container hidden">
+          <div class="spinner-organic"></div>
+          <h3 class="loader-title logo-serif">Synthesizing Carbon Profile</h3>
+          <p id="loader-status-text" class="loader-status">Layer 1: Parsing unstructured answers...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN DASHBOARD SECTION (Shown when onboarded) -->
+    <section id="main-section" class="main-layout hidden">
+      
+      <!-- Top Header Nav -->
+      <header class="app-header">
+        <div class="header-brand">
+          <h1 class="logo-serif">EcoLoop</h1>
+          <span class="header-divider"></span>
+          <p class="header-tagline">Behavioral Loop Architecture</p>
+        </div>
+        
+        <!-- Gamification Stats Panel -->
+        <div class="stats-panel">
+          <div class="stat-item" title="Active Streak">
+            <span class="stat-label">Streak</span>
+            <span id="stat-streak" class="stat-value">0</span>
+            <span class="stat-suffix">weeks</span>
+          </div>
+          <div class="stat-item" title="Experience Points">
+            <span class="stat-label">XP</span>
+            <span id="stat-xp" class="stat-value">0</span>
+          </div>
+          <div class="stat-item" title="Your Experience Level">
+            <span class="stat-label">Level</span>
+            <span id="stat-level" class="stat-value">1</span>
+          </div>
+          <div class="stat-item" title="Current Week">
+            <span class="stat-label">Week</span>
+            <span id="stat-week" class="stat-value">1</span>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-navigation">
+          <button id="nav-dashboard" class="tab-btn active">My Future</button>
+          <button id="nav-prompts" class="tab-btn">Prompt Lab</button>
+          <button id="nav-journal" class="tab-btn">Journal History</button>
+        </nav>
+      </header>
+
+      <!-- TAB CONTAINER -->
+      <main class="content-container">
+
+        <!-- TAB 1: DASHBOARD -->
+        <div id="tab-dashboard" class="dashboard-grid">
+          
+          <!-- COLUMN 1: TIME MACHINE STORYTELLER -->
+          <section class="dashboard-col time-machine-column">
+            <div class="section-card-header">
+              <h2 class="card-section-title">2035 Time Machine</h2>
+              <p class="card-section-subtitle">A sensory preview of your projected reality. Grow your loop to blend the futures.</p>
+            </div>
+            
+            <!-- Side-by-side or Overlapped cards blending dynamic opacities -->
+            <div id="time-machine-container" class="time-machine-deck state-unchanged">
+              
+              <!-- Unchanged Path Card -->
+              <div class="time-card card-unchanged">
+                <div class="card-badge badge-red">July 2035 — The Unchanged Path</div>
+                <div id="story-unchanged" class="story-viewport">
+                  <!-- Injected via app.js -->
+                </div>
+              </div>
+              
+              <!-- EcoLoop Path Card -->
+              <div class="time-card card-ecoloop">
+                <div class="card-badge badge-green">July 2035 — The EcoLoop Path</div>
+                <div id="story-ecoloop" class="story-viewport">
+                  <!-- Injected via app.js -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Profile Summary & Categories indicators -->
+            <div class="profile-card">
+              <div class="profile-header-row">
+                <div>
+                  <span class="profile-meta">Persona Classification</span>
+                  <h3 id="profile-persona" class="profile-persona logo-serif">The Urban Commuter</h3>
+                </div>
+                <div class="co2-metric-container">
+                  <span id="profile-co2" class="co2-val">12.4</span>
+                  <span class="co2-unit">t CO₂/yr</span>
+                </div>
+              </div>
+              <p id="profile-summary" class="profile-summary">Your carbon output is shaped by consistent short-haul flights and driving patterns.</p>
+              
+              <div class="profile-pills-grid">
+                <div class="pill-wrapper">
+                  <span class="pill-label">Transit</span>
+                  <span id="pill-transit" class="impact-pill">Medium</span>
+                </div>
+                <div class="pill-wrapper">
+                  <span class="pill-label">Diet</span>
+                  <span id="pill-diet" class="impact-pill">High</span>
+                </div>
+                <div class="pill-wrapper">
+                  <span class="pill-label">Flights</span>
+                  <span id="pill-flights" class="impact-pill">Medium</span>
+                </div>
+                <div class="pill-wrapper">
+                  <span class="pill-label">Energy</span>
+                  <span id="pill-energy" class="impact-pill">Low</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- COLUMN 2: THE LIVING TREE VISUALIZATION -->
+          <section class="dashboard-col tree-column">
+            <div class="section-card-header text-center">
+              <h2 class="card-section-title">The Living Tree</h2>
+              <p class="card-section-subtitle">Blooms when weekly nudges open; builds dense canopy as XP grows.</p>
+            </div>
+            
+            <div class="tree-canvas-container">
+              <svg id="tree-svg" class="tree-svg" width="100%" height="420">
+                <!-- SVG dynamically populated via tree.js -->
+              </svg>
+              <div class="tree-interact-tip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                Click flower buds to toggle weekly nudges
+              </div>
+            </div>
+          </section>
+
+          <!-- COLUMN 3: WEEKLY NUDGES & ACTION -->
+          <section class="dashboard-col nudges-column">
+            <div class="section-card-header">
+              <h2 class="card-section-title">Weekly Micro-Nudges</h2>
+              <p class="card-section-subtitle">Hyper-specific friction reducers, driven by behavioral science.</p>
+            </div>
+            
+            <!-- Container for active nudges -->
+            <div id="nudges-container" class="nudges-deck">
+              <!-- Injected dynamically via app.js -->
+            </div>
+
+            <!-- End Week Trigger -->
+            <div class="nudge-actions-footer">
+              <button id="btn-end-week" class="btn-end-week" title="Complete all nudges to close the week and generate reflection">
+                <span>Reflect & End Week</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+              <p class="end-week-hint">Checking all 3 nudges activates the Week Reflection generator.</p>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- TAB 2: PROMPT ARCHITECTURE LAB -->
+        <div id="tab-prompts" class="prompts-grid hidden">
+          <div class="prompts-sidebar">
+            <h2 class="sidebar-title logo-serif">Prompt Architecture</h2>
+            <p class="sidebar-desc">EcoLoop uses prompt-as-architecture to structure behavioral systems. Select a layer below to inspect, modify, and test the system prompts.</p>
+            
+            <div class="prompt-selector-wrapper">
+              <label for="prompt-select" class="control-label">Select Prompt Layer</label>
+              <select id="prompt-select" class="select-control">
+                <option value="onboarding">Layer 1: Onboarding Parser</option>
+                <option value="timeMachine">Layer 2: Time Machine Storyteller</option>
+                <option value="nudges">Layer 3: Micro-Nudge Architect</option>
+                <option value="reflection">Layer 4: Journal Synthesizer</option>
+              </select>
+            </div>
+
+            <div class="prompt-architecture-details">
+              <div class="details-card">
+                <h4>System Integrity</h4>
+                <p>Edits made here are live. When you save a system prompt, EcoLoop automatically recalculates your 2035 Time Machine stories using the modified instructions.</p>
+                <div class="science-tag">Try writing: "Use a dystopian tone" or "Use a sarcastic tone" to test prompt malleability!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prompt-editor-panel">
+            <div class="editor-header">
+              <h3 id="prompt-title" class="editor-title logo-serif">Layer 1: Conversational Onboarding Parser</h3>
+              <span id="prompt-model" class="model-badge">Behavioral Model: Cognitive Load Reduction</span>
+            </div>
+            
+            <p id="prompt-desc" class="prompt-explanation">Instead of forms, this prompt converts raw conversational inputs into numeric footprint dimensions.</p>
+            
+            <div class="editor-body">
+              <label for="prompt-system-text" class="editor-label">System Prompt</label>
+              <textarea id="prompt-system-text" class="prompt-textarea" spellcheck="false"></textarea>
+            </div>
+            
+            <div class="editor-footer">
+              <button id="btn-restore-prompts" class="btn-secondary">Reset Defaults</button>
+              <button id="btn-save-prompt" class="btn-primary">Save Prompt Changes</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: JOURNAL HISTORY -->
+        <div id="tab-journal" class="journal-grid hidden">
+          <div class="journal-header-section">
+            <h2 class="logo-serif section-main-title">The Weekly Reflections</h2>
+            <p class="tagline-editorial">An archive of your changing future, written in human language rather than numbers.</p>
+          </div>
+          
+          <div id="journal-history-container" class="journal-history-deck">
+            <!-- Dynamic list of history entries injected by app.js -->
+          </div>
+        </div>
+
+      </main>
+
+      <!-- App Footer with Global Reset -->
+      <footer class="app-footer">
+        <p class="footer-copyright">EcoLoop Behavioral Framework © 2026. Inspired by Fogg Behavior Models and Affective Forecasting.</p>
+        <button id="btn-reset-global" class="btn-reset-app" title="Restarts onboarding for presentation testing">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M16 3h5v5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 21H3v-5"/></svg>
+          Reset Journey (For Judges)
+        </button>
+      </footer>
+    </section>
+
+    <!-- WEEKLY REFLECTION GENERATOR OVERLAY MODAL -->
+    <div id="reflection-modal" class="modal-overlay hidden">
+      <div class="modal-card">
+        
+        <!-- Loading State -->
+        <div id="reflection-loading" class="modal-loading-content">
+          <div class="spinner-organic"></div>
+          <h3 class="logo-serif">Synthesizing Weekly Journal Entry</h3>
+          <p>Layer 4 prompt is composing your reflection based on behavior changes...</p>
+        </div>
+
+        <!-- Loaded State -->
+        <div id="reflection-loaded" class="modal-loaded-content hidden">
+          <div class="modal-header">
+            <h3 id="modal-title" class="modal-headline logo-serif">End of Week 1 Reflections</h3>
+          </div>
+          <div class="modal-body-content">
+            <div class="quote-container">
+              <span class="quote-mark">“</span>
+              <p id="reflection-modal-text" class="reflection-quote-text">
+                Your actions this week made a difference...
+              </p>
+              <span class="quote-mark text-right">”</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="btn-modal-close" class="btn-primary">
+              Continue to Next Week
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Load JavaScript Modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
