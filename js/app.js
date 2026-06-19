@@ -337,10 +337,13 @@ class EcoLoopApp {
   switchTab(tabId) {
     this.activeTab = tabId;
     
-    // Nav class updates
+    // Nav class updates and ARIA attributes
     this.navDashboard.classList.toggle("active", tabId === "dashboard");
+    this.navDashboard.setAttribute("aria-selected", tabId === "dashboard" ? "true" : "false");
     this.navPrompts.classList.toggle("active", tabId === "prompts");
+    this.navPrompts.setAttribute("aria-selected", tabId === "prompts" ? "true" : "false");
     this.navJournal.classList.toggle("active", tabId === "journal");
+    this.navJournal.setAttribute("aria-selected", tabId === "journal" ? "true" : "false");
 
     // Display block/none update
     this.tabDashboard.classList.toggle("hidden", tabId !== "dashboard");
@@ -409,6 +412,10 @@ class EcoLoopApp {
     // Progress bar width
     const pct = ((this.onboardingStep + 1) / QUIZ_QUESTIONS.length) * 100;
     this.onboardingProgress.style.width = `${pct}%`;
+    const progressContainer = this.onboardingProgress.parentElement;
+    if (progressContainer) {
+      progressContainer.setAttribute("aria-valuenow", Math.round(pct));
+    }
 
     // Show/hide Back button
     if (this.onboardingStep > 0) {
@@ -898,7 +905,7 @@ class EcoLoopApp {
 
       card.innerHTML = `
         <div class="nudge-checkbox-wrapper">
-          <input type="checkbox" id="nudge-check-${index}" ${nudge.completed ? "checked" : ""} class="nudge-checkbox">
+          <input type="checkbox" id="nudge-check-${index}" ${nudge.completed ? "checked" : ""} class="nudge-checkbox" aria-label="Complete nudge: ${nudge.title}">
           <label for="nudge-check-${index}" class="nudge-checkbox-label"></label>
         </div>
         <div class="nudge-content">

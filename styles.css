@@ -8,6 +8,7 @@
   --color-plum-light: #F2ECEF;
   --color-plum-opaque: rgba(59, 30, 48, 0.08);
   --color-sage: #8FA89B;
+  --color-sage-text: #435E51;
   --color-sage-light: #E7ECE9;
   --color-mint: #CBE7D3;
   --color-mint-bright: #A3D9B1;
@@ -116,7 +117,7 @@ button, input, select, textarea {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 1.15rem;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
 }
 
 /* Quiz Card */
@@ -158,7 +159,7 @@ button, input, select, textarea {
 .question-number {
   font-family: var(--font-serif);
   font-weight: 600;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -331,7 +332,7 @@ button, input, select, textarea {
 
 .loader-status {
   font-style: italic;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   font-size: 0.95rem;
 }
 
@@ -393,7 +394,7 @@ button, input, select, textarea {
 .header-tagline {
   font-family: var(--font-serif);
   font-size: 1rem;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
 }
 
 /* Stats Panel */
@@ -436,7 +437,7 @@ button, input, select, textarea {
 
 .stats-highlight {
   transform: scale(1.3);
-  color: var(--color-sage) !important;
+  color: var(--color-sage-text) !important;
 }
 
 /* Navigation Tabs */
@@ -500,7 +501,7 @@ button, input, select, textarea {
 
 .card-section-subtitle {
   font-size: 0.85rem;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   margin-top: 0.2rem;
 }
 
@@ -613,7 +614,7 @@ button, input, select, textarea {
 
 .profile-meta {
   font-size: 0.75rem;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -665,7 +666,7 @@ button, input, select, textarea {
 .pill-label {
   font-size: 0.65rem;
   text-transform: uppercase;
-  color: #777;
+  color: #555;
 }
 
 .impact-pill {
@@ -721,7 +722,7 @@ button, input, select, textarea {
 
 .tree-interact-tip {
   font-size: 0.75rem;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   display: flex;
   align-items: center;
   gap: 0.3rem;
@@ -1025,7 +1026,7 @@ button, input, select, textarea {
 
 .end-week-hint {
   font-size: 0.75rem;
-  color: #777;
+  color: #555;
   margin-top: 0.5rem;
 }
 
@@ -1221,7 +1222,7 @@ button, input, select, textarea {
 
 .prompt-explanation {
   font-size: 0.92rem;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   font-style: italic;
 }
 
@@ -1303,7 +1304,7 @@ button, input, select, textarea {
 .empty-history-editorial p {
   font-family: var(--font-serif);
   font-style: italic;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   font-size: 1.1rem;
   max-width: 500px;
   margin: 0 auto;
@@ -1336,7 +1337,7 @@ button, input, select, textarea {
 .journal-entry-date {
   font-size: 0.8rem;
   font-style: italic;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
 }
 
 .journal-entry-text {
@@ -1352,7 +1353,7 @@ button, input, select, textarea {
   font-size: 0.78rem;
   font-weight: 500;
   text-transform: uppercase;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   letter-spacing: 0.5px;
 }
 
@@ -1402,7 +1403,7 @@ button, input, select, textarea {
 
 .modal-loading-content p {
   font-size: 0.85rem;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   font-style: italic;
 }
 
@@ -1476,7 +1477,7 @@ button, input, select, textarea {
 
 .footer-copyright {
   font-size: 0.78rem;
-  color: #777;
+  color: #555;
 }
 
 .btn-reset-app {
@@ -1663,7 +1664,7 @@ button, input, select, textarea {
 .inspect-fogg-trigger {
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--color-sage);
+  color: var(--color-sage-text);
   cursor: pointer;
   margin-left: 0.4rem;
   text-decoration: underline;
