@@ -236,6 +236,10 @@ async function callGroq(systemPrompt, userPrompt, apiKey = null) {
   }
 
   // Otherwise, use the secure serverless proxy endpoint
+  if (typeof window === "undefined" || (typeof process !== "undefined" && process.env.NODE_ENV === "test")) {
+    throw new Error("Relative URL proxy fetch is not supported in Node/test environments.");
+  }
+
   const response = await fetch("/generation/generate", {
     method: "POST",
     headers: {
@@ -298,7 +302,7 @@ export const simulation = {
         ecoloopStory: stories.ecoloopPath
       };
     } catch (err) {
-      console.warn("Groq API call failed or not configured, falling back to local simulation:", err);
+      console.warn("Groq API call failed or not configured, falling back to local simulation:", err.message);
     }
 
     // Simulate AI loading delay
@@ -721,7 +725,7 @@ export const simulation = {
       const reflection = await callGroq(customPrompts.reflection, userText, apiKey);
       return reflection.reflectionText;
     } catch (err) {
-      console.warn("Groq API reflection call failed, falling back to local simulation:", err);
+      console.warn("Groq API reflection call failed, falling back to local simulation:", err.message);
     }
 
     // Simulate AI loading delay
@@ -806,7 +810,7 @@ Summary: ${profile.summaryStatement}`;
 
       return await callGroq(systemPrompt, userPrompt, apiKey);
     } catch (err) {
-      console.warn("Groq API agent debate failed, falling back to local simulation:", err);
+      console.warn("Groq API agent debate failed, falling back to local simulation:", err.message);
     }
 
     // Fallback simulation
@@ -842,7 +846,7 @@ Summary: ${profile.summaryStatement}`;
       const response = await callGroq(systemPrompt, userPrompt, apiKey);
       return response.unchangedPath || response.ecoloopPath || response.storyText || JSON.stringify(response);
     } catch (err) {
-      console.warn("Groq API single story failed, falling back to local simulation:", err);
+      console.warn("Groq API single story failed, falling back to local simulation:", err.message);
     }
 
     // Fallback simulation based on prompt keywords

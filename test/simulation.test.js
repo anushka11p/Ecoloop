@@ -79,3 +79,36 @@ test("simulation.generateSingleStory - supports custom system instructions", asy
   const scientificStory = await simulation.generateSingleStory(mockProfile, "Use a scientific data report style", null);
   assert.ok(scientificStory.includes("Simulation parameters"), "Should return scientific narrative on matching keyword");
 });
+
+test("simulation.generateReflection - handles full, partial, and empty nudge completions", async () => {
+  const completed = [
+    { title: "The Active Half-Mile", effort: "Medium" }
+  ];
+  const missed = [
+    { title: "Idle-Free Waiting", effort: "Easy" }
+  ];
+  const allCompleted = [
+    { title: "The Active Half-Mile", effort: "Medium" },
+    { title: "Idle-Free Waiting", effort: "Easy" },
+    { title: "Oat Milk Shift", effort: "Easy" }
+  ];
+  const mockPrompts = {
+    reflection: "Write a warm, empathetic reflection."
+  };
+
+  // 1. Partial completion
+  const reflectionPartial = await simulation.generateReflection(completed, missed, 2, 45, mockPrompts, null);
+  assert.ok(reflectionPartial, "Should return reflection text");
+  assert.ok(reflectionPartial.toLowerCase().includes("active half-mile") || reflectionPartial.toLowerCase().includes("progress"), "Should contain active references");
+
+  // 2. Full completion
+  const reflectionFull = await simulation.generateReflection(allCompleted, [], 3, 110, mockPrompts, null);
+  assert.ok(reflectionFull, "Should return reflection text");
+  assert.ok(reflectionFull.toLowerCase().includes("perfect") || reflectionFull.toLowerCase().includes("completed") || reflectionFull.toLowerCase().includes("alignment"), "Should note perfect week attributes");
+
+  // 3. Empty completion
+  const reflectionEmpty = await simulation.generateReflection([], allCompleted, 0, 0, mockPrompts, null);
+  assert.ok(reflectionEmpty, "Should return reflection text");
+  assert.ok(reflectionEmpty.toLowerCase().includes("no tasks") || reflectionEmpty.toLowerCase().includes("without a shift") || reflectionEmpty.toLowerCase().includes("complacency"), "Should note zero completion attributes");
+});
+

@@ -8,6 +8,16 @@ import { promptLayers } from "./prompts.js";
 import { simulation } from "./simulation.js";
 import { tree } from "./tree.js";
 
+function escapeHTML(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 // Audio plucks for positive reinforcement
 function playChime(success = true) {
   try {
@@ -381,6 +391,7 @@ class EcoLoopApp {
           const iconSpan = document.createElement("span");
           iconSpan.className = "material-symbols-outlined pill-icon";
           iconSpan.textContent = opt.icon;
+          iconSpan.setAttribute("aria-hidden", "true");
           pill.appendChild(iconSpan);
         }
         
@@ -841,12 +852,17 @@ class EcoLoopApp {
   }
 
   renderStories() {
-    this.storyUnchanged.innerHTML = `
-      <p class="story-text unchanged">${this.state.unchangedStory}</p>
-    `;
-    this.storyEcoloop.innerHTML = `
-      <p class="story-text ecoloop">${this.state.ecoloopStory}</p>
-    `;
+    this.storyUnchanged.innerHTML = "";
+    const pUnchanged = document.createElement("p");
+    pUnchanged.className = "story-text unchanged";
+    pUnchanged.textContent = this.state.unchangedStory;
+    this.storyUnchanged.appendChild(pUnchanged);
+
+    this.storyEcoloop.innerHTML = "";
+    const pEcoloop = document.createElement("p");
+    pEcoloop.className = "story-text ecoloop";
+    pEcoloop.textContent = this.state.ecoloopStory;
+    this.storyEcoloop.appendChild(pEcoloop);
   }
 
   updateTimeMachineBlend() {
@@ -900,29 +916,36 @@ class EcoLoopApp {
       card.className = `nudge-card ${nudge.completed ? "completed" : ""}`;
       
       // Select technique icon or initials
-      const techniqueShort = nudge.behavioralTechnique.split(" ").map(w => w[0]).join("");
+      const escapedTitle = escapeHTML(nudge.title);
+      const escapedEffort = escapeHTML(nudge.effort);
+      const escapedEffortLower = escapedEffort.toLowerCase();
+      const escapedImpact = escapeHTML(nudge.impactScore);
+      const escapedDesc = escapeHTML(nudge.actionDescription);
+      const escapedTechnique = escapeHTML(nudge.behavioralTechnique);
+      const techniqueShort = escapeHTML(nudge.behavioralTechnique.split(" ").map(w => w[0]).join(""));
+      const escapedExplanation = escapeHTML(nudge.scientificExplanation);
       const fogg = nudge.foggMetrics || { motivation: 75, ability: 80, prompt: 95 };
 
       card.innerHTML = `
         <div class="nudge-checkbox-wrapper">
-          <input type="checkbox" id="nudge-check-${index}" ${nudge.completed ? "checked" : ""} class="nudge-checkbox" aria-label="Complete nudge: ${nudge.title}">
+          <input type="checkbox" id="nudge-check-${index}" ${nudge.completed ? "checked" : ""} class="nudge-checkbox" aria-label="Complete nudge: ${escapedTitle}">
           <label for="nudge-check-${index}" class="nudge-checkbox-label"></label>
         </div>
         <div class="nudge-content">
           <div class="nudge-header-row">
-            <h4 class="nudge-title">${nudge.title}</h4>
+            <h4 class="nudge-title">${escapedTitle}</h4>
             <div class="nudge-badges">
-              <span class="badge-effort ${nudge.effort.toLowerCase()}">${nudge.effort}</span>
-              <span class="badge-impact">+${nudge.impactScore}kg CO₂</span>
+              <span class="badge-effort ${escapedEffortLower}">${escapedEffort}</span>
+              <span class="badge-impact">+${escapedImpact}kg CO₂</span>
             </div>
           </div>
-          <p class="nudge-desc">${nudge.actionDescription}</p>
+          <p class="nudge-desc">${escapedDesc}</p>
           <div class="nudge-technique">
-            <span class="technique-tag" title="Behavioral Science: ${nudge.behavioralTechnique}">
-              <span class="tag-icon">${techniqueShort}</span>${nudge.behavioralTechnique}
+            <span class="technique-tag" title="Behavioral Science: ${escapedTechnique}">
+              <span class="tag-icon">${techniqueShort}</span>${escapedTechnique}
             </span>
             <p class="technique-explanation">
-              ${nudge.scientificExplanation}
+              ${escapedExplanation}
               <span class="inspect-fogg-trigger" data-index="${index}">[🔍 Behavioral Model Analysis]</span>
             </p>
             
@@ -933,23 +956,23 @@ class EcoLoopApp {
               <div class="fogg-metric-row">
                 <span class="fogg-label">Motivation (M)</span>
                 <div class="fogg-bar-container">
-                  <div class="fogg-bar-fill motivation-bar" style="width: ${fogg.motivation}%"></div>
+                  <div class="fogg-bar-fill motivation-bar" style="width: ${Number(fogg.motivation)}%"></div>
                 </div>
-                <span class="fogg-value">${fogg.motivation}%</span>
+                <span class="fogg-value">${Number(fogg.motivation)}%</span>
               </div>
               <div class="fogg-metric-row">
                 <span class="fogg-label">Ability (A)</span>
                 <div class="fogg-bar-container">
-                  <div class="fogg-bar-fill ability-bar" style="width: ${fogg.ability}%"></div>
+                  <div class="fogg-bar-fill ability-bar" style="width: ${Number(fogg.ability)}%"></div>
                 </div>
-                <span class="fogg-value">${fogg.ability}%</span>
+                <span class="fogg-value">${Number(fogg.ability)}%</span>
               </div>
               <div class="fogg-metric-row">
                 <span class="fogg-label">Prompt (P)</span>
                 <div class="fogg-bar-container">
-                  <div class="fogg-bar-fill prompt-bar" style="width: ${fogg.prompt}%"></div>
+                  <div class="fogg-bar-fill prompt-bar" style="width: ${Number(fogg.prompt)}%"></div>
                 </div>
-                <span class="fogg-value">${fogg.prompt}%</span>
+                <span class="fogg-value">${Number(fogg.prompt)}%</span>
               </div>
               <p class="fogg-summary-note">Based on BJ Fogg's behavior design, this nudge maximizes <strong>Ability</strong> by reducing friction, matching your current <strong>Motivation</strong>, and placing a visual <strong>Prompt</strong> directly on your Living Tree.</p>
             </div>
@@ -1012,15 +1035,17 @@ class EcoLoopApp {
     logs.forEach(log => {
       const entry = document.createElement("div");
       entry.className = "journal-entry-card";
+      const escapedTimestamp = escapeHTML(log.timestamp);
+      const escapedReflection = escapeHTML(log.reflectionText);
       entry.innerHTML = `
         <div class="journal-entry-header">
-          <h4 class="journal-entry-title">Week ${log.week} Reflections</h4>
-          <span class="journal-entry-date">${log.timestamp}</span>
+          <h4 class="journal-entry-title">Week ${Number(log.week)} Reflections</h4>
+          <span class="journal-entry-date">${escapedTimestamp}</span>
         </div>
-        <p class="journal-entry-text">"${log.reflectionText}"</p>
+        <p class="journal-entry-text">"${escapedReflection}"</p>
         <div class="journal-entry-footer">
-          <span>Actions completed: ${log.completedActionsCount}/${log.totalActionsCount}</span>
-          <span>+${log.xpEarned} XP</span>
+          <span>Actions completed: ${Number(log.completedActionsCount)}/${Number(log.totalActionsCount)}</span>
+          <span>+${Number(log.xpEarned)} XP</span>
         </div>
       `;
       this.journalHistoryContainer.appendChild(entry);
@@ -1172,11 +1197,12 @@ class EcoLoopApp {
           avatarText = "account_balance";
         }
 
+        const escapedAgent = escapeHTML(turn.agent);
         bubble.className = `debate-bubble ${agentClass}`;
         bubble.innerHTML = `
           <div class="bubble-meta">
-            <span class="bubble-avatar"><span class="material-symbols-outlined">${avatarText}</span></span>
-            <span>${turn.agent}</span>
+            <span class="bubble-avatar"><span class="material-symbols-outlined" aria-hidden="true">${avatarText}</span></span>
+            <span>${escapedAgent}</span>
           </div>
           <div class="bubble-text"></div>
         `;
@@ -1204,7 +1230,8 @@ class EcoLoopApp {
       }
     } catch (err) {
       console.error(err);
-      chatContainer.innerHTML += `<div class="empty-nudges" style="color: var(--color-terracotta);">Error conducting debate simulation: ${err.message}</div>`;
+      const escapedError = escapeHTML(err.message);
+      chatContainer.innerHTML += `<div class="empty-nudges" style="color: var(--color-terracotta);">Error conducting debate simulation: ${escapedError}</div>`;
     } finally {
       btn.disabled = false;
       btn.textContent = "Start Multi-Agent Debate";
